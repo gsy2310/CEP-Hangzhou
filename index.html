@@ -347,6 +347,9 @@
     background:var(--vermilion-soft); color:var(--vermilion); border:1.5px solid var(--vermilion);
     padding:4px 12px; border-radius:999px; white-space:nowrap;
   }
+  .call-badge.call-badge-note{
+    background:var(--osmanthus-soft); color:var(--osmanthus-ink); border-color:var(--osmanthus);
+  }
   .day-chev{flex:none; transition:transform .2s ease; color:var(--ink-faint);}
   .day[open] .day-chev{transform:rotate(180deg);}
   .day-body{padding:0 22px 24px 22px;}
@@ -681,7 +684,7 @@
   var DAY_COLORS = {1:'var(--osmanthus)', 2:'var(--tea)', 3:'var(--lake)', 4:'var(--vermilion)', 5:'var(--plum)', 6:'var(--slate)'};
 
   var DAYS = [
-    { num:1, date:'11 OCT · SUN', title:'Touchdown in Hangzhou',
+    { num:1, date:'11 OCT · SUN', title:'Touchdown in Hangzhou', note:'13:30 at Terminal 1',
       moments:[
         {k:'transit', time:'13:30', h:'Meet at Changi Airport, Terminal 1', depart:true, b:['Departure meeting point — do not be the one everyone waits for.']},
         {k:'transit', time:'16:30 – 21:45', h:'Flight TR188 · Singapore → Hangzhou', b:['Wheels up ✈️']},
@@ -1070,7 +1073,7 @@
     det.id = 'day-' + day.num;
     if (idx === 0) det.setAttribute('open','');
 
-    var callBadge = day.call ? '<span class="call-badge">⏰ Morning Call: '+day.call+'</span>' : '';
+    var callBadge = day.call ? '<span class="call-badge">⏰ Morning Call: '+day.call+'</span>' : (day.note ? '<span class="call-badge call-badge-note">⏰ '+day.note+'</span>' : '');
     var summary = document.createElement('summary');
     summary.innerHTML =
       '<span class="day-stamp"><span class="n">D'+day.num+'</span><span class="lbl">Day</span></span>' +
