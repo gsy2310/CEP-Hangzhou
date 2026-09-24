@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEG · Hangzhou 2026</title>
+</head>
+<body>
 <title>Hangzhou Study Trip</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Ma+Shan+Zheng&display=swap">
 <style>
@@ -337,7 +340,13 @@
   .day-stamp .lbl{font-size:0.55rem; letter-spacing:0.08em; text-transform:uppercase; margin-top:1px;}
   .day-headtext{flex:1; min-width:0;}
   .day-headtext .date{font-size:0.76rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-faint);}
-  .day-headtext h3{font-size:1.28rem; margin-top:2px;}
+  .day-title-row{display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin-top:2px;}
+  .day-headtext h3{font-size:1.28rem; margin-top:0;}
+  .call-badge{
+    display:inline-flex; align-items:center; flex:none; font-size:0.8rem; font-weight:800; letter-spacing:0;
+    background:var(--vermilion-soft); color:var(--vermilion); border:1.5px solid var(--vermilion);
+    padding:4px 12px; border-radius:999px; white-space:nowrap;
+  }
   .day-chev{flex:none; transition:transform .2s ease; color:var(--ink-faint);}
   .day[open] .day-chev{transform:rotate(180deg);}
   .day-body{padding:0 22px 24px 22px;}
@@ -352,6 +361,12 @@
   .moment.k-culture::before{border-color:var(--tea);}
   .moment.k-meal::before{border-color:var(--osmanthus);}
   .moment .time{font-size:0.72rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-faint);}
+  .moment .time.depart-time{
+    display:inline-flex; align-items:center; font-size:0.86rem; font-weight:800; letter-spacing:0;
+    text-transform:none; background:var(--vermilion-soft); color:var(--vermilion);
+    border:1.5px solid var(--vermilion); padding:4px 12px; border-radius:999px;
+  }
+  .moment.depart::before{border-color:var(--vermilion); background:var(--vermilion-soft);}
   .moment h4{font-size:1.08rem; margin-top:3px;}
   .moment .cn{font-size:1rem; color:var(--ink-soft); margin-left:6px;}
   .moment ul.blurbs{margin:8px 0 0; padding-left:1.1em; color:var(--ink-soft); font-size:0.92rem;}
@@ -422,9 +437,6 @@
   .reveal{opacity:1; transform:none; transition:opacity .5s ease, transform .5s ease;}
   .reveal.pre{opacity:0; transform:translateY(16px);}
 </style>
-</head>
-<body>
-
 
 <nav class="topnav">
   <div class="wrap">
@@ -650,7 +662,7 @@
       q:'Hangzhou Urban Planning Exhibition Hall, Hangzhou'}
   };
 
-  /* real trip photos for each stop, one per location id — files sit next to index.html, no subfolder */
+  /* real trip photos for each stop, one per location id — see images/<id>.jpg */
   var PHOTO = {
     hotel: 'hotel.jpg', airport: 'airport.jpg', meijiawu: 'meijiawu.jpg',
     loongair: 'loongair.jpg', zjuaero: 'zjuaero.jpg', aitown: 'aitown.jpg',
@@ -671,12 +683,12 @@
   var DAYS = [
     { num:1, date:'11 OCT · SUN', title:'Touchdown in Hangzhou',
       moments:[
-        {k:'transit', time:'13:30', h:'Meet at Changi Airport, Terminal 1', b:['Departure meeting point — do not be the one everyone waits for.']},
+        {k:'transit', time:'13:30', h:'Meet at Changi Airport, Terminal 1', depart:true, b:['Departure meeting point — do not be the one everyone waits for.']},
         {k:'transit', time:'16:30 – 21:45', h:'Flight TR188 · Singapore → Hangzhou', b:['Wheels up ✈️']},
         {k:'meal', time:'Dinner', h:'In-flight meal', b:[]},
         {k:'visit', time:'21:45', h:'Arrival', loc:'airport', b:['Meet your local guide at the arrival hall','Transfer to the hotel, check in and rest up — big first day tomorrow']}
       ]},
-    { num:2, date:'12 OCT · MON', title:'Orientation & Tea Culture',
+    { num:2, date:'12 OCT · MON', title:'Orientation & Tea Culture', call:'08:00',
       moments:[
         {k:'meal', time:'Breakfast', h:'At the hotel', b:[]},
         {k:'visit', time:'Morning', h:'Orientation Briefing', loc:'hotel', b:['Trip objectives, schedule and what you are expected to get out of it','Cultural etiquette and safety guidelines, before you need them']},
@@ -687,9 +699,10 @@
           hook:'It is a 300-year-old <strong>quality-control system</strong> with zero sensors — precisely the kind of problem your <strong>engineering modules</strong> will teach you to solve with them.'},
         {k:'meal', time:'Dinner', h:'Local restaurant, Hangzhou', b:[]}
       ]},
-    { num:3, date:'13 OCT · TUE', title:'Up In the Air',
+    { num:3, date:'13 OCT · TUE', title:'Up In the Air', call:'07:30',
       moments:[
         {k:'meal', time:'Breakfast', h:'At the hotel', b:[]},
+        {k:'transit', time:'08:30', h:'Depart from hotel', loc:'hotel', depart:true, b:['Heading to Loong Air — be at the lobby on time']},
         {k:'visit', time:'Morning', h:'Loong Air · Zhejiang Changlong Airlines', loc:'loongair',
           b:['Inspect real aircraft engines and landing gear up close','Learn the principles of flight and civil aviation safety rules','Cabin emergency simulator: practise the real procedures'],
           dip:['aero','avmgmt'],
@@ -703,9 +716,10 @@
           hook:'Their <strong>wind-tunnel</strong> and simulation work mirrors exactly what you would model in your own <strong>Aerospace Engineering</strong> modules back at RP.'},
         {k:'meal', time:'Dinner', h:'Local restaurant, Hangzhou', b:[]}
       ]},
-    { num:4, date:'14 OCT · WED', title:'Smart City, Green Energy & Culture',
+    { num:4, date:'14 OCT · WED', title:'Smart City, Green Energy & Culture', call:'07:30',
       moments:[
         {k:'meal', time:'Breakfast', h:'At the hotel', b:[]},
+        {k:'transit', time:'08:30', h:'Depart from hotel', loc:'hotel', depart:true, b:['Heading to Xiaoshan Robot Town — be at the lobby on time']},
         {k:'visit', time:'Morning', h:'Xiaoshan Robot Town', loc:'aitown',
           b:['Live demos of industrial robots from leading Chinese and international brands, and how they are used in manufacturing and automation','Specialised robots at work — firefighting, emergency response, intelligent inspection and assistive robots for people with disabilities','A tour of the wider robotics ecosystem — R&D, manufacturing, product iteration and real-world deployment'],
           dip:['mrs','eee'],
@@ -723,9 +737,10 @@
           hook:'Half the "magic" is <strong>mechanical engineering</strong> in disguise — the stage floor alone hides motors and hydraulics that could fill a module on their own.'},
         {k:'meal', time:'Dinner', h:'Before the show, local restaurant', b:[]}
       ]},
-    { num:5, date:'15 OCT · THU', title:'Logistics & Innovation',
+    { num:5, date:'15 OCT · THU', title:'Logistics & Innovation', call:'06:30',
       moments:[
         {k:'meal', time:'Breakfast', h:'At the hotel', b:[]},
+        {k:'transit', time:'07:30', h:'Depart from hotel', loc:'hotel', depart:true, b:['Heading to Cainiao Smart Logistics Hub — be at the lobby on time']},
         {k:'visit', time:'Morning', h:'Cainiao Smart Logistics Hub', loc:'cainiao',
           b:['Seminar on supply chain innovation and process optimisation','See a live demo of real-time supply chain management systems','Case study: Hangzhou’s export logistics network'],
           dip:['scm','bpem'],
@@ -739,9 +754,10 @@
           hook:'It is a good chance to ask what a <strong>semester</strong> actually looks like once you have picked a specialisation — useful intel before you pick yours.'},
         {k:'meal', time:'Dinner', h:'Local restaurant, Hangzhou', b:[]}
       ]},
-    { num:6, date:'16 OCT · FRI', title:'Last Day: Make & Move',
+    { num:6, date:'16 OCT · FRI', title:'Last Day: Make & Move', call:'07:00',
       moments:[
         {k:'meal', time:'Breakfast', h:'At the hotel, then pack up and check out', b:[]},
+        {k:'transit', time:'08:00', h:'Depart from hotel', loc:'hotel', depart:true, b:['Heading to SHINING 3D — be at the lobby on time']},
         {k:'visit', time:'Morning', h:'SHINING 3D', loc:'shining3d',
           b:['See the full digital workflow for 3D scanning and reverse engineering','Follow a 3D print from design file to finished part','Explore uses in industry, medicine and museum restoration'],
           dip:['eng','mrs'],
@@ -1054,10 +1070,11 @@
     det.id = 'day-' + day.num;
     if (idx === 0) det.setAttribute('open','');
 
+    var callBadge = day.call ? '<span class="call-badge">⏰ Morning Call: '+day.call+'</span>' : '';
     var summary = document.createElement('summary');
     summary.innerHTML =
       '<span class="day-stamp"><span class="n">D'+day.num+'</span><span class="lbl">Day</span></span>' +
-      '<span class="day-headtext"><span class="date">'+day.date+'</span><h3>'+day.title+'</h3></span>' +
+      '<span class="day-headtext"><span class="date">'+day.date+'</span><span class="day-title-row"><h3>'+day.title+'</h3>'+callBadge+'</span></span>' +
       '<span class="day-chev" aria-hidden="true">▾</span>';
     det.appendChild(summary);
 
@@ -1068,9 +1085,9 @@
 
     day.moments.forEach(function(m){
       var li = document.createElement('li');
-      li.className = 'moment k-' + m.k;
+      li.className = 'moment k-' + m.k + (m.depart ? ' depart' : '');
       var loc = m.loc ? LOCATIONS[m.loc] : null;
-      var html = '<div class="time">' + kIcon[m.k] + ' ' + m.time + '</div>';
+      var html = '<div class="time' + (m.depart ? ' depart-time' : '') + '">' + kIcon[m.k] + ' ' + m.time + '</div>';
       html += '<h4>' + m.h + (loc && loc.cn ? ' <span class="cn">'+loc.cn+'</span>' : '') + '</h4>';
       if (m.b && m.b.length){
         html += '<ul class="blurbs">' + m.b.map(function(x){return '<li>'+x+'</li>';}).join('') + '</ul>';
